@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.funtl</groupId>
+        <artifactId>my-shop-dependencies</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../my-shop-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>my-shop-external</artifactId>
+    <packaging>jar</packaging>
+
+    <name>my-shop-external</name>
+    <description></description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-external-kaptcha</id>
+                        <!-- 触发时机：执行 mvn clean 命令时自动触发插件 -->
+                        <phase>clean</phase>
+                        <configuration>
+                            <!-- 存放依赖文件的位置 -->
+                            <file>${project.basedir}/libs/kaptcha-2.3.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <!-- 自定义 groupId -->
+                            <groupId>com.google.code.kaptcha</groupId>
+                            <!-- 自定义 artifactId -->
+                            <artifactId>kaptcha</artifactId>
+                            <!-- 自定义版本号 -->
+                            <version>2.3</version>
+                            <!-- 打包方式 -->
+                            <packaging>jar</packaging>
+                            <!-- 是否自动生成 POM -->
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.my.shop.web.api.dao.TbUserDao">
+    <sql id="tbUserColumns">
+          a.id,
+          a.username,
+          a.password,
+          a.phone,
+          a.email,
+          a.created,
+          a.updated
+    </sql>
+
+    <select id="login" resultType="TbUser">
+        SELECT
+          <include refid="tbUserColumns" />
+        FROM
+          tb_user AS a
+        WHERE username = #{username}
+          OR phone = #{username}
+          OR email = #{username}
+    </select>
+</mapper>

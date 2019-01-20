@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:myshop.properties"/>
+
+    <bean id="emailSendUtils" class="com.funtl.my.shop.commons.utils.EmailSendUtils" />
+    <bean id="email" class="org.apache.commons.mail.SimpleEmail">
+        <property name="hostName" value="${email.host.name}" />
+        <property name="smtpPort" value="${email.smtp.port}" />
+        <property name="authenticator">
+            <bean class="org.apache.commons.mail.DefaultAuthenticator">
+                <constructor-arg name="userName" value="${email.username}" />
+                <constructor-arg name="password" value="${email.password}" />
+            </bean>
+        </property>
+        <property name="SSLOnConnect" value="true" />
+        <property name="from" value="${email.username}" />
+    </bean>
+</beans>

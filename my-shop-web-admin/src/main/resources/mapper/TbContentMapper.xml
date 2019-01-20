@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.my.shop.web.admin.dao.TbContentDao">
+    <sql id="tbContentColumns">
+        a.id,
+        a.title,
+        a.sub_title AS subTitle,
+        a.title_desc AS titleDesc,
+        a.url,
+        a.pic,
+        a.pic2,
+        a.content,
+        a.created,
+        a.updated,
+        b.id AS "tbContentCategory.id",
+        b.name AS "tbContentCategory.name"
+    </sql>
+    
+    <sql id="tbContentJoins">
+        LEFT JOIN tb_content_category AS b ON a.category_id = b.id
+    </sql>
+
+    <select id="getById" resultType="TbContent">
+        SELECT
+        <include refid="tbContentColumns" />
+        FROM
+        tb_content AS a
+        <include refid="tbContentJoins" />
+        WHERE
+        a.id = #{id}
+    </select>
+
+    <select id="selectAll" resultType="TbContent">
+        SELECT
+        <include refid="tbContentColumns" />
+        FROM
+        tb_content AS a
+        <include refid="tbContentJoins" />
+    </select>
+
+    <select id="page" resultType="TbContent" parameterType="java.util.Map">
+        SELECT
+        <include refid="tbContentColumns" />
+        FROM
+        tb_content AS a
+        <include refid="tbContentJoins" />
+        <where>
+            <if test="pageParams.title != null and pageParams.title != ''" >
+                AND a.title LIKE CONCAT ('%', #{pageParams.title}, '%')
+            </if>
+            <if test="pageParams.subTitle != null and pageParams.subTitle != ''" >
+                AND a.sub_title LIKE CONCAT ('%', #{pageParams.subTitle}, '%')
+            </if>
+            <if test="pageParams.titleDesc != null and pageParams.titleDesc != ''" >
+                AND a.title_desc LIKE CONCAT ('%', #{pageParams.titleDesc}, '%')
+            </if>
+        </where>
+        LIMIT #{start}, #{length}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tb_content AS a
+        <where>
+            <if test="title != null and title != ''" >
+                AND a.title LIKE CONCAT ('%', #{title}, '%')
+            </if>
+            <if test="subTitle != null and subTitle != ''" >
+                AND a.sub_title LIKE CONCAT ('%', #{subTitle}, '%')
+            </if>
+            <if test="titleDesc != null and titleDesc != ''" >
+                AND a.title_desc LIKE CONCAT ('%', #{titleDesc}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO tb_content (
+          `category_id`,
+          `title`,
+          `sub_title`,
+          `title_desc`,
+          `url`,
+          `pic`,
+          `pic2`,
+          `content`,
+          `created`,
+          `updated`
+        )
+        VALUES
+          (
+            #{tbContentCategory.id},
+            #{title},
+            #{subTitle},
+            #{titleDesc},
+            #{url},
+            #{pic},
+            #{pic2},
+            #{content},
+            #{created},
+            #{updated}
+          )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tb_content WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteMulti">
+        DELETE FROM tb_content
+        WHERE id IN
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByCategoryId">
+        DELETE FROM tb_content
+        WHERE category_id IN
+        <foreach collection="array" open="(" close=")" separator="," item="categoryId">
+            #{categoryId}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        UPDATE
+          tb_content
+        SET
+            `category_id` =  #{tbContentCategory.id},
+            `title` = #{title},
+            `sub_title` = #{subTitle},
+            `title_desc` = #{titleDesc},
+            `url` = #{url},
+            `pic` = #{pic},
+            `pic2` = #{pic2},
+            `content` = #{content},
+            `created` = #{created},
+            `updated` = #{updated}
+        WHERE id = #{id}
+    </update>
+</mapper>
