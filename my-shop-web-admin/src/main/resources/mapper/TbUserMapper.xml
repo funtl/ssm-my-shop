@@ -34,7 +34,7 @@
           <include refid="tbUserColumns" />
         FROM
           tb_user AS a
-        ORDER BY a.update DESC
+        ORDER BY a.updated DESC
     </select>
 
     <select id="page" resultType="TbUser" parameterType="java.util.Map">
